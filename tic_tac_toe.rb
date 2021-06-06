@@ -15,6 +15,21 @@ class Board
     puts
   end
 
+  def check_input(user_input)
+
+    @row1.display_values.each do
+      | slot |
+      p "user_input is #{user_input}"
+      p "slot is #{slot}"
+
+
+      if slot.to_s == user_input
+        puts "Match on #{user_input}"
+        break
+      end
+    end
+  end
+
 end
 
 class Row
@@ -52,6 +67,15 @@ def main
   puts
 
   board.print_board
+
+  # top_row.slot1 = "x"
+  # board.print_board
+
+  while true
+    puts "Enter a number"
+    user_input = gets.chomp
+    board.check_input(user_input)
+  end
 
 end
 
