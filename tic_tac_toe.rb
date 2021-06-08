@@ -1,26 +1,26 @@
 class Board
+  attr_reader :combined_rows
 
-  def initialize(row1,row2,row3)
-    @row1 = row1
-    @row2 = row2
-    @row3 = row3
+  def initialize()
+    @board_array = [1,2,3,4,5,6,7,8,9]
   end
+  
 
   def print_board
-    puts "#{@row1.slot1} | #{@row1.slot2} | #{@row1.slot3}"
+    puts "#{@board_array[6]} | #{@board_array[7]} | #{@board_array[8]}"
     puts "--+---+--"
-    puts "#{@row2.slot1} | #{@row2.slot2} | #{@row2.slot3}"
+    puts "#{@board_array[3]} | #{@board_array[4]} | #{@board_array[5]}"
     puts "--+---+--"
-    puts "#{@row3.slot1} | #{@row3.slot2} | #{@row3.slot3}"
+    puts "#{@board_array[0]} | #{@board_array[1]} | #{@board_array[2]}"
     puts
   end
 
   def check_input(user_input)
 
-    @row1.display_values.each do
+    @board_array.each do
       | slot |
       p "user_input is #{user_input}"
-      p "slot is #{slot}"
+      p "slot is #{slot}"      
 
 
       if slot.to_s == user_input
@@ -30,18 +30,6 @@ class Board
     end
   end
 
-end
-
-class Row
-  attr_accessor :slot1, :slot2, :slot3
-  
-  def initialize(values_array)
-    (@slot1, @slot2, @slot3) = values_array
-  end
-
-  def display_values
-    [@slot1, @slot2, @slot3]
-  end
 end
 
 class Player
@@ -54,10 +42,7 @@ class Player
 end
 
 def main
-  top_row = Row.new([7, 8, 9])
-  mid_row = Row.new([4, 5, 6])
-  bot_row = Row.new([1, 2, 3])
-  board = Board.new(top_row,mid_row,bot_row)
+  board = Board.new()
 
   player1 = Player.new('Player1', 'X')
   player2 = Player.new('Player2', 'O')
@@ -67,9 +52,6 @@ def main
   puts
 
   board.print_board
-
-  # top_row.slot1 = "x"
-  # board.print_board
 
   while true
     puts "Enter a number"
