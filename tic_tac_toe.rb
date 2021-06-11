@@ -1,4 +1,5 @@
 class Board
+  attr_reader :board_array
 
   def initialize
     @board_array = [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -14,16 +15,19 @@ class Board
   end
 
   def check_input(user_input)
-    #p "user_input is #{user_input}"
 
     @board_array.each_with_index do |num, i|
-      #p "num is #{num}"
-      #p "i is #{i}"
 
       next unless num.to_s == user_input
 
-      #puts "Match on #{user_input}"
-      @board_array[i] = 'X'
+      p "i is #{i}"
+      p "@board_array[i-1] is #{@board_array[i-1]}"
+
+      if @board_array[i-1].is_a? Numeric
+        @board_array[i-1] < 9 ? (return @board_array[i-1]) : (return 0)
+      else
+        next
+      end
 
       break
     end
@@ -48,6 +52,7 @@ end
 
 class Game
   def initialize()
+
     @board = Board.new
 
     @player1 = Player.new('Player1', 'X', true)
@@ -65,13 +70,16 @@ class Game
   
 
     while true
-      check_active_player
-      @player1.active_toggle
-      @player2.active_toggle
-      check_active_player
       puts 'Enter a number'
       user_input = gets.chomp
-      @board.check_input(user_input)
+      checked_input = @board.check_input(user_input)
+      p "checked_input is #{checked_input}"
+      
+      p "check_active_player is #{check_active_player}"
+      
+      @board.board_array[checked_input] = check_active_player
+
+      
       puts
       @board.print_board
     end
@@ -79,7 +87,11 @@ class Game
 
   def check_active_player
     @players_array.each do |player|
-      puts "#{player.name}: #{player.active}"
+      p "player is #{player}"
+      p "player piece is #{player.piece}"
+      p "player active? is #{player.active}"
+      #puts "#{player.name}: #{player.active}"
+      player.active == true ? (return player.piece) : next
     end
   end
 end
