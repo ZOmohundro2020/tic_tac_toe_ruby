@@ -1,3 +1,4 @@
+# creates a board
 class Board
   attr_reader :board_array
 
@@ -14,21 +15,20 @@ class Board
     puts
   end
 
-  def is_occupied?(input)
-    p 'is occupied?'
-    p "input is #{input}"
-    p "@board_array at input is #{@board_array[input-1]}"
-    if @board_array[input-1] == "X" or @board_array[input-1] == "O"
-      p "it's x or o"
-      return "occupied"
+  def occupied?(input)
+    if (@board_array[input - 1] == 'X') || (@board_array[input - 1] == 'O')
+      'occupied'
     else
-      p @board_array[input - 1]
-      return @board_array[input - 1]
+      @board_array[input - 1]
     end
   end
 
+  def check_game_status
+    p 'game is in progress'
+  end
 end
 
+# creates a player
 class Player
   attr_reader :name, :piece, :active
 
@@ -38,16 +38,14 @@ class Player
     @active = active
   end
 
-  def active_toggle()
+  def active_toggle
     @active = !@active
   end
-
 end
 
-
+# defines the overall game
 class Game
-  def initialize()
-
+  def initialize
     @board = Board.new
 
     @player1 = Player.new('Player1', 'X', true)
@@ -55,30 +53,35 @@ class Game
 
     @players_array = [@player1, @player2]
 
-    
-
     puts "\nWelcome to tic-tac-toe"
     puts "#{@player1.name} will start and their piece is '#{@player1.piece}'"
     puts
 
     @board.print_board
-  
 
     while true
-      puts 'Enter a number'
-      user_input = gets.chomp
-      check_occupied = @board.is_occupied?(user_input.to_i)
+      puts "Player #{whois_active_player?}, Enter a number (1-9): "
 
-      if check_occupied == "occupied"
-        p "Sorry, that space is occupied"
-      else 
+      user_input = gets.chomp
+      next unless (user_input.to_i > 0) && (user_input.to_i < 10)
+
+      check_occupied = @board.occupied?(user_input.to_i)
+
+      if check_occupied == 'occupied'
+        p 'Sorry, that space is occupied'
+      else
         @board.board_array[check_occupied - 1] = whois_active_player?
         @player1.active_toggle
         @player2.active_toggle
       end
 
       puts
+
       @board.print_board
+
+      @board.check_game_status
+
+      puts "It is now #{whois_active_player?}'s turn"
 
     end
   end
