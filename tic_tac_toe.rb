@@ -14,24 +14,19 @@ class Board
     puts
   end
 
-  def check_input(user_input)
-
-    @board_array.each_with_index do |num, i|
-
-      next unless num.to_s == user_input
-
-      p "i is #{i}"
-      p "@board_array[i-1] is #{@board_array[i-1]}"
-
-      if @board_array[i-1].is_a? Numeric
-        @board_array[i-1] < 9 ? (return @board_array[i-1]) : (return 0)
-      else
-        next
-      end
-
-      break
+  def is_occupied?(input)
+    p 'is occupied?'
+    p "input is #{input}"
+    p "@board_array at input is #{@board_array[input-1]}"
+    if @board_array[input-1] == "X" or @board_array[input-1] == "O"
+      p "it's x or o"
+      return "occupied"
+    else
+      p @board_array[input - 1]
+      return @board_array[input - 1]
     end
   end
+
 end
 
 class Player
@@ -72,25 +67,22 @@ class Game
     while true
       puts 'Enter a number'
       user_input = gets.chomp
-      checked_input = @board.check_input(user_input)
-      p "checked_input is #{checked_input}"
-      
-      p "check_active_player is #{check_active_player}"
-      
-      @board.board_array[checked_input] = check_active_player
+      check_occupied = @board.is_occupied?(user_input.to_i)
 
-      
+      if check_occupied == "occupied"
+        p "Sorry, that space is occupied"
+      else 
+        @board.board_array[check_occupied - 1] = "X"
+      end
+
       puts
       @board.print_board
+
     end
   end
 
-  def check_active_player
+  def whois_active_player?
     @players_array.each do |player|
-      p "player is #{player}"
-      p "player piece is #{player.piece}"
-      p "player active? is #{player.active}"
-      #puts "#{player.name}: #{player.active}"
       player.active == true ? (return player.piece) : next
     end
   end
