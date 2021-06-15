@@ -72,7 +72,9 @@ class Game
       if check_occupied == "occupied"
         p "Sorry, that space is occupied"
       else 
-        @board.board_array[check_occupied - 1] = "X"
+        @board.board_array[check_occupied - 1] = whois_active_player?
+        @player1.active_toggle
+        @player2.active_toggle
       end
 
       puts
