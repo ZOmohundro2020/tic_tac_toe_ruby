@@ -23,9 +23,24 @@ class Board
     end
   end
 
-  def check_game_status
-    p 'game is in progress'
+  def check_game_status(active_player_piece)
+    return check_victory(active_player_piece) || check_draw(active_player_piece)
+
   end
+
+  def check_victory(active_player_piece)
+    #p 'game is won'
+  end
+
+  def check_draw(active_player_piece)
+    if @board_array.none? { |n| n.is_a? Numeric}
+      p 'game has come to a draw'
+      return true
+    else
+      return false
+    end
+  end
+
 end
 
 # creates a player
@@ -59,30 +74,34 @@ class Game
 
     @board.print_board
 
-    while true
-      puts "Player #{whois_active_player?}, Enter a number (1-9): "
 
-      user_input = gets.chomp
-      next unless (user_input.to_i > 0) && (user_input.to_i < 10)
+    def play()
+      while true
+        puts "Player #{whois_active_player?}, Enter a number (1-9): "
 
-      check_occupied = @board.occupied?(user_input.to_i)
+        user_input = gets.chomp
+        next unless (user_input.to_i > 0) && (user_input.to_i < 10)
 
-      if check_occupied == 'occupied'
-        p 'Sorry, that space is occupied'
-      else
-        @board.board_array[check_occupied - 1] = whois_active_player?
-        @player1.active_toggle
-        @player2.active_toggle
+        check_occupied = @board.occupied?(user_input.to_i)
+
+        if check_occupied == 'occupied'
+          p 'Sorry, that space is occupied'
+        else
+          @board.board_array[check_occupied - 1] = whois_active_player?
+          @player1.active_toggle
+          @player2.active_toggle
+        end
+
+        puts
+
+        @board.print_board
+
+        break if @board.check_game_status(whois_active_player?) == true
+
+        puts "It is now #{whois_active_player?}'s turn"
+
       end
-
-      puts
-
-      @board.print_board
-
-      @board.check_game_status
-
-      puts "It is now #{whois_active_player?}'s turn"
-
+      p 'reached end of play()'
     end
   end
 
@@ -94,4 +113,4 @@ class Game
 end
 
 new_game = Game.new
-new_game
+new_game.play
