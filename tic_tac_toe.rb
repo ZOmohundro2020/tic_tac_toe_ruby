@@ -30,7 +30,23 @@ class Board
 
   def check_victory(active_player_piece)
     #p 'game is won'
+    return check_vertical(active_player_piece) ||
+    check_horizontal(active_player_piece) ||
+    check_diagonal(active_player_piece)
   end
+
+  def check_vertical(active_player_piece)
+    return false
+  end
+
+  def check_horizontal(active_player_piece)
+    return false
+  end
+
+  def check_diagonal(active_player_piece)
+    return false
+  end
+
 
   def check_draw(active_player_piece)
     if @board_array.none? { |n| n.is_a? Numeric}
