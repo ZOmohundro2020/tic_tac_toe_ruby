@@ -23,40 +23,47 @@ class Board
     end
   end
 
-  def check_game_status(active_player_piece)
-    return check_victory(active_player_piece) || check_draw(active_player_piece)
-
+  def check_game_status
+    check_victory || check_draw
   end
 
-  def check_victory(active_player_piece)
-    #p 'game is won'
-    return check_vertical(active_player_piece) ||
-    check_horizontal(active_player_piece) ||
-    check_diagonal(active_player_piece)
+  def check_victory
+    check_vertical ||
+    check_horizontal ||
+    check_diagonal
   end
 
-  def check_vertical(active_player_piece)
-    return false
-  end
+  def check_vertical
+    column_1 = [board_array[6], board_array[3], board_array[0]]
+    column_2 = [board_array[7], board_array[4], board_array[1]]
+    column_3 = [board_array[8], board_array[5], board_array[2]]
 
-  def check_horizontal(active_player_piece)
-    return false
-  end
-
-  def check_diagonal(active_player_piece)
-    return false
-  end
-
-
-  def check_draw(active_player_piece)
-    if @board_array.none? { |n| n.is_a? Numeric}
-      p 'game has come to a draw'
+    if column_1.all? { |n| (n == 'X') || (n == 'O') } ||
+       column_2.all? { |n| (n == 'X') || (n == 'O') } ||
+       column_3.all? { |n| (n == 'X') || (n == 'O') }
       return true
+
+    end
+
+    false
+  end
+
+  def check_horizontal
+    false
+  end
+
+  def check_diagonal
+    false
+  end
+
+  def check_draw
+    if @board_array.none? { |n| n.is_a? Numeric }
+      p 'game has come to a draw'
+      true
     else
-      return false
+      false
     end
   end
-
 end
 
 # creates a player
@@ -90,8 +97,7 @@ class Game
 
     @board.print_board
 
-
-    def play()
+    def play
       while true
         puts "Player #{whois_active_player?}, Enter a number (1-9): "
 
@@ -112,18 +118,26 @@ class Game
 
         @board.print_board
 
-        break if @board.check_game_status(whois_active_player?) == true
+        break if @board.check_game_status == true
 
         puts "It is now #{whois_active_player?}'s turn"
 
       end
-      p 'reached end of play()'
+
+      puts "#{whois_previous_player?} wins!"
+      puts
     end
   end
 
   def whois_active_player?
     @players_array.each do |player|
       player.active == true ? (return player.piece) : next
+    end
+  end
+
+  def whois_previous_player?
+    @players_array.each do |player|
+      player.active == false ? (return player.piece) : next
     end
   end
 end
