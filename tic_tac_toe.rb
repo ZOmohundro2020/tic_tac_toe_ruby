@@ -23,36 +23,36 @@ class Board
     end
   end
 
-  def check_game_status
-    check_victory || check_draw
+  def check_game_status(piece)
+    check_victory(piece) || check_draw
   end
 
-  def check_victory
-    check_vertical ||
-    check_horizontal ||
-    check_diagonal
+  def check_victory(piece)
+    check_vertical(piece) ||
+    check_horizontal(piece) ||
+    check_diagonal(piece)
   end
 
-  def check_vertical
+  def check_vertical(piece)
     column_1 = [board_array[6], board_array[3], board_array[0]]
     column_2 = [board_array[7], board_array[4], board_array[1]]
     column_3 = [board_array[8], board_array[5], board_array[2]]
+    columns = [column_1,column_2,column_3]
 
-    if column_1.all? { |n| (n == 'X') || (n == 'O') } ||
-       column_2.all? { |n| (n == 'X') || (n == 'O') } ||
-       column_3.all? { |n| (n == 'X') || (n == 'O') }
-      return true
-
+    columns.any? do |column|
+      if column.all? { |n| (n == piece) } 
+        return true
+      end
     end
 
     false
   end
 
-  def check_horizontal
+  def check_horizontal(piece)
     false
   end
 
-  def check_diagonal
+  def check_diagonal(piece)
     false
   end
 
@@ -118,7 +118,7 @@ class Game
 
         @board.print_board
 
-        break if @board.check_game_status == true
+        break if @board.check_game_status(whois_previous_player?) == true
 
         puts "It is now #{whois_active_player?}'s turn"
 
