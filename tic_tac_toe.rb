@@ -49,10 +49,33 @@ class Board
   end
 
   def check_horizontal(piece)
+    row_1 = [board_array[6], board_array[7], board_array[8]]
+    row_2 = [board_array[3], board_array[4], board_array[5]]
+    row_3 = [board_array[0], board_array[1], board_array[2]]
+    rows = [row_1,row_2,row_3]
+    
+    rows.any? do |row|
+      if row.all? { |n| (n == piece) } 
+        return true
+      end
+    end
+
     false
+
   end
 
   def check_diagonal(piece)
+    
+    diag_1 = [board_array[6], board_array[4], board_array[2]]
+    diag_2 = [board_array[0], board_array[4], board_array[8]]
+    diags = [diag_1,diag_2]
+
+    diags.any? do |diag|
+      if diag.all? { |n| (n == piece) }
+        return true
+      end
+    end  
+        
     false
   end
 
