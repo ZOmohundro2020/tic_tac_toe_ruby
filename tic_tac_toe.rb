@@ -24,25 +24,24 @@ class Board
   end
 
   def check_game_status(piece)
-    check_victory(piece) || check_draw
+    return 'win' if check_victory(piece)
+    return 'draw' if check_draw
   end
 
   def check_victory(piece)
     check_vertical(piece) ||
-    check_horizontal(piece) ||
-    check_diagonal(piece)
+      check_horizontal(piece) ||
+      check_diagonal(piece)
   end
 
   def check_vertical(piece)
     column_1 = [board_array[6], board_array[3], board_array[0]]
     column_2 = [board_array[7], board_array[4], board_array[1]]
     column_3 = [board_array[8], board_array[5], board_array[2]]
-    columns = [column_1,column_2,column_3]
+    columns = [column_1, column_2, column_3]
 
     columns.any? do |column|
-      if column.all? { |n| (n == piece) } 
-        return true
-      end
+      return true if column.all? { |n| (n == piece) }
     end
 
     false
@@ -52,36 +51,29 @@ class Board
     row_1 = [board_array[6], board_array[7], board_array[8]]
     row_2 = [board_array[3], board_array[4], board_array[5]]
     row_3 = [board_array[0], board_array[1], board_array[2]]
-    rows = [row_1,row_2,row_3]
-    
+    rows = [row_1, row_2, row_3]
+
     rows.any? do |row|
-      if row.all? { |n| (n == piece) } 
-        return true
-      end
+      return true if row.all? { |n| (n == piece) }
     end
 
     false
-
   end
 
   def check_diagonal(piece)
-    
     diag_1 = [board_array[6], board_array[4], board_array[2]]
     diag_2 = [board_array[0], board_array[4], board_array[8]]
-    diags = [diag_1,diag_2]
+    diags = [diag_1, diag_2]
 
     diags.any? do |diag|
-      if diag.all? { |n| (n == piece) }
-        return true
-      end
-    end  
-        
+      return true if diag.all? { |n| (n == piece) }
+    end
+
     false
   end
 
   def check_draw
     if @board_array.none? { |n| n.is_a? Numeric }
-      p 'game has come to a draw'
       true
     else
       false
@@ -141,14 +133,21 @@ class Game
 
         @board.print_board
 
-        break if @board.check_game_status(whois_previous_player?) == true
+        check_status = @board.check_game_status(whois_previous_player?)
 
-        puts "It is now #{whois_active_player?}'s turn"
+        if check_status == 'win'
+          puts "#{whois_previous_player?} wins!"
+          puts
+          break
+        elsif  check_status == 'draw'
+          puts 'The game has come to a draw.'
+          puts
+          break
+        else
+          puts "It is now #{whois_active_player?}'s turn"
+        end
 
       end
-
-      puts "#{whois_previous_player?} wins!"
-      puts
     end
   end
 
